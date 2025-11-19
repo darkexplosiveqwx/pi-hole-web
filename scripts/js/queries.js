@@ -77,7 +77,7 @@ function getDatabaseInfo() {
 
 function initDateRangePicker() {
   // If there's no valid data in the database, disable the datepicker
-  if (beginningOfTime === null || endOfTime === null) {
+  if (beginningOfTime === null) {
     $("#querytime").prop("disabled", true);
     $("#querytime").addClass("disabled");
     $("#querytime-note").text("ℹ️ No data in the database");
@@ -105,8 +105,8 @@ function initDateRangePicker() {
           moment().subtract(1, "days").startOf("day"),
           moment().subtract(1, "days").endOf("day"),
         ],
-        "Last 7 Days": [moment().subtract(6, "days"), maxDateMoment],
-        "Last 30 Days": [moment().subtract(29, "days"), maxDateMoment],
+        "Last 7 Days": [moment().subtract(6, "days").startOf("day"), maxDateMoment],
+        "Last 30 Days": [moment().subtract(29, "days").startOf("day"), maxDateMoment],
         "This Month": [moment().startOf("month"), maxDateMoment],
         "Last Month": [
           moment().subtract(1, "month").startOf("month"),
