@@ -4,10 +4,10 @@
  *
  * To rebuild or modify this file with the latest versions of the included
  * software please visit:
- *   https://datatables.net/download/#bs/dt-1.13.6
+ *   https://datatables.net/download/#bs/dt-1.13.11
  *
  * Included libraries:
- *  DataTables 1.13.6
+ *  DataTables 1.13.11
  */
 
 @charset "UTF-8";
@@ -31,16 +31,18 @@ table.dataTable td.dt-control {
 table.dataTable td.dt-control:before {
   display: inline-block;
   color: rgba(0, 0, 0, 0.5);
-  content: "►";
+  content: "▶";
 }
 table.dataTable tr.dt-hasChild td.dt-control:before {
   content: "▼";
 }
 
-html.dark table.dataTable td.dt-control:before {
+html.dark table.dataTable td.dt-control:before,
+:root[data-bs-theme=dark] table.dataTable td.dt-control:before {
   color: rgba(255, 255, 255, 0.5);
 }
-html.dark table.dataTable tr.dt-hasChild td.dt-control:before {
+html.dark table.dataTable tr.dt-hasChild td.dt-control:before,
+:root[data-bs-theme=dark] table.dataTable tr.dt-hasChild td.dt-control:before {
   color: rgba(255, 255, 255, 0.5);
 }
 
@@ -122,6 +124,7 @@ div.dataTables_processing {
   margin-top: -26px;
   text-align: center;
   padding: 2px;
+  z-index: 10;
 }
 div.dataTables_processing > div:last-child {
   position: relative;
