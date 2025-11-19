@@ -4,24 +4,24 @@
  *
  * To rebuild or modify this file with the latest versions of the included
  * software please visit:
- *   https://datatables.net/download/#bs/dt-1.10.23
+ *   https://datatables.net/download/#bs/dt-1.10.24
  *
  * Included libraries:
- *  DataTables 1.10.23
+ *  DataTables 1.10.24
  */
 
-/*! DataTables 1.10.23
- * ©2008-2020 SpryMedia Ltd - datatables.net/license
+/*! DataTables 1.10.24
+ * ©2008-2021 SpryMedia Ltd - datatables.net/license
  */
 
 /**
  * @summary     DataTables
  * @description Paginate, search and order HTML tables
- * @version     1.10.23
+ * @version     1.10.24
  * @file        jquery.dataTables.js
  * @author      SpryMedia Ltd
  * @contact     www.datatables.net
- * @copyright   Copyright 2008-2020 SpryMedia Ltd.
+ * @copyright   Copyright 2008-2021 SpryMedia Ltd.
  *
  * This source file is free software, available under the following license:
  *   MIT license - http://datatables.net/license
@@ -1100,6 +1100,8 @@
 						_fnLanguageCompat( json );
 						_fnCamelToHungarian( defaults.oLanguage, json );
 						$.extend( true, oLanguage, json );
+			
+						_fnCallbackFire( oSettings, null, 'i18n', [oSettings]);
 						_fnInitialise( oSettings );
 					},
 					error: function () {
@@ -1108,6 +1110,9 @@
 					}
 				} );
 				bInitHandedOff = true;
+			}
+			else {
+				_fnCallbackFire( oSettings, null, 'i18n', [oSettings]);
 			}
 			
 			/*
@@ -9542,7 +9547,7 @@
 	 *  @type string
 	 *  @default Version number
 	 */
-	DataTable.version = "1.10.23";
+	DataTable.version = "1.10.24";
 
 	/**
 	 * Private data store, containing all of the settings objects that are
@@ -13966,7 +13971,7 @@
 		 *
 		 *  @type string
 		 */
-		builder: "bs/dt-1.10.23",
+		builder: "bs/dt-1.10.24",
 	
 	
 		/**
@@ -14494,8 +14499,8 @@
 		"sSortAsc": "sorting_asc",
 		"sSortDesc": "sorting_desc",
 		"sSortable": "sorting", /* Sortable in both directions */
-		"sSortableAsc": "sorting_asc_disabled",
-		"sSortableDesc": "sorting_desc_disabled",
+		"sSortableAsc": "sorting_desc_disabled",
+		"sSortableDesc": "sorting_asc_disabled",
 		"sSortableNone": "sorting_disabled",
 		"sSortColumn": "sorting_", /* Note that an int is postfixed for the sorting order */
 	
@@ -14936,7 +14941,6 @@
 	
 					cell
 						.removeClass(
-							column.sSortingClass +' '+
 							classes.sSortAsc +' '+
 							classes.sSortDesc
 						)
