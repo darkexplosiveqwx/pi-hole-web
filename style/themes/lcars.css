@@ -1361,44 +1361,6 @@ table.table-bordered.dataTable td {
   border: 1px solid #111 !important;
 }
 
-table.dataTable thead .sorting:not(.sorting_asc):not(.sorting_desc)::before {
-  content: "\25B3";
-  position: absolute;
-  bottom: 16px;
-  right: 8px;
-  display: block;
-  font-family: "Glyphicons Halflings";
-  opacity: 0.3;
-  font-size: 0.6em;
-}
-
-table.dataTable thead .sorting::after,
-table.dataTable thead .sorting_asc::after,
-table.dataTable thead .sorting_desc::after,
-table.dataTable thead .sorting_asc_disabled::after,
-table.dataTable thead .sorting_desc_disabled::after {
-  opacity: 0.6;
-}
-
-table.dataTable thead .sorting:not(.sorting_asc):not(.sorting_desc)::after {
-  opacity: 0.3;
-  content: "\25BD";
-  font-size: 0.6em;
-}
-
-table.dataTable thead .sorting_asc::after {
-  content: "\25B2";
-}
-
-table.dataTable thead .sorting_desc::after {
-  content: "\25BC";
-}
-
-table.dataTable thead .sorting_asc_disabled::after,
-table.dataTable thead .sorting_desc_disabled::after {
-  color: #eee;
-}
-
 .table-striped > tbody > tr:nth-of-type(2n + 1) {
   background: none;
   background-color: rgba(80, 80, 80, 0.1);
