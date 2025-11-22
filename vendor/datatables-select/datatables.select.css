@@ -4,10 +4,10 @@
  *
  * To rebuild or modify this file with the latest versions of the included
  * software please visit:
- *   https://datatables.net/download/#bs/sl-1.3.1
+ *   https://datatables.net/download/#bs/sl-1.3.4
  *
  * Included libraries:
- *  Select 1.3.1
+ *  Select 1.3.4
  */
 
 table.dataTable tbody > tr.selected,
@@ -88,7 +88,7 @@ table.dataTable tbody th.select-checkbox:after {
 }
 table.dataTable tbody td.select-checkbox:before,
 table.dataTable tbody th.select-checkbox:before {
-  content: ' ';
+  content: " ";
   margin-top: -6px;
   margin-left: -6px;
   border: 1px solid black;
@@ -96,11 +96,20 @@ table.dataTable tbody th.select-checkbox:before {
 }
 table.dataTable tr.selected td.select-checkbox:after,
 table.dataTable tr.selected th.select-checkbox:after {
-  content: '\2714';
-  margin-top: -11px;
-  margin-left: -4px;
+  content: "✓";
+  font-size: 20px;
+  margin-top: -19px;
+  margin-left: -6px;
   text-align: center;
   text-shadow: 1px 1px #B0BED9, -1px -1px #B0BED9, 1px -1px #B0BED9, -1px 1px #B0BED9;
+}
+table.dataTable.compact tbody td.select-checkbox:before,
+table.dataTable.compact tbody th.select-checkbox:before {
+  margin-top: -12px;
+}
+table.dataTable.compact tr.selected td.select-checkbox:after,
+table.dataTable.compact tr.selected th.select-checkbox:after {
+  margin-top: -16px;
 }
 
 div.dataTables_wrapper span.select-info,
@@ -110,7 +119,7 @@ div.dataTables_wrapper span.select-item {
 
 @media screen and (max-width: 640px) {
   div.dataTables_wrapper span.select-info,
-  div.dataTables_wrapper span.select-item {
+div.dataTables_wrapper span.select-item {
     margin-left: 0;
     display: block;
   }
