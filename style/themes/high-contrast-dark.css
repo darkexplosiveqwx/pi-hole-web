@@ -918,31 +918,6 @@ input[type="password"]::-webkit-caps-lock-indicator {
   background-color: rgba(0, 64, 64, 0.35);
 }
 
-table.dataTable thead .sorting::after,
-table.dataTable thead .sorting_asc::after,
-table.dataTable thead .sorting_desc::after,
-table.dataTable thead .sorting_asc_disabled::after,
-table.dataTable thead .sorting_desc_disabled::after {
-  opacity: 1;
-  width: 20px;
-  padding: 0 1px;
-  border-radius: 4px;
-  text-align: center;
-}
-
-table.dataTable thead .sorting:not(.sorting_asc, .sorting_desc)::after {
-  opacity: 0.6;
-}
-
-table.dataTable thead th:hover.sorting::after,
-table.dataTable thead th:hover.sorting_asc::after,
-table.dataTable thead th:hover.sorting_desc::after,
-table.dataTable thead th:hover.sorting_asc_disabled::after,
-table.dataTable thead th:hover.sorting_desc_disabled::after {
-  color: #fff;
-  background: #000;
-}
-
 td.highlight {
   background-color: rgba(255, 204, 0, 0.15);
 }
