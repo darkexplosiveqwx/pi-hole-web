@@ -4,13 +4,13 @@
  *
  * To rebuild or modify this file with the latest versions of the included
  * software please visit:
- *   https://datatables.net/download/#bs/b-2.0.1
+ *   https://datatables.net/download/#bs/b-2.1.1
  *
  * Included libraries:
- *  Buttons 2.0.1
+ *  Buttons 2.1.1
  */
 
-/*! Buttons for DataTables 2.0.1
+/*! Buttons for DataTables 2.1.1
  * ©2016-2021 SpryMedia Ltd - datatables.net/license
  */
 
@@ -192,9 +192,11 @@ $.extend( Buttons.prototype, {
 	 * Add a new button
 	 * @param {object} config Button configuration object, base string name or function
 	 * @param {int|string} [idx] Button index for where to insert the button
+	 * @param {boolean} [draw=true] Trigger a draw. Set a false when adding
+	 *   lots of buttons, until the last button.
 	 * @return {Buttons} Self for chaining
 	 */
-	add: function ( config, idx )
+	add: function ( config, idx, draw )
 	{
 		var buttons = this.s.buttons;
 
@@ -216,9 +218,13 @@ $.extend( Buttons.prototype, {
 			config !== undefined ? config.split : undefined,
 			(config === undefined || config.split === undefined || config.split.length === 0) && base !== undefined,
 			false,
-			idx );
-		this._draw();
+			idx
+		);
 
+		if (draw === undefined || draw === true) {
+			this._draw();
+		}
+	
 		return this;
 	},
 
@@ -237,14 +243,16 @@ $.extend( Buttons.prototype, {
 			}
 	
 			for (i=0; i<newButtons.length; i++) {
+				var newBtn = newButtons[i];
+
 				this._expandButton(
 					button.buttons,
-					newButtons[i],
-					newButtons[i] !== undefined && newButtons[i].config !== undefined && newButtons[i].config.split !== undefined,
+					newBtn,
+					newBtn !== undefined && newBtn.config !== undefined && newBtn.config.split !== undefined,
 					true,
-					newButtons[i].parentConf !== undefined && newButtons[i].parentConf.split !== undefined,
+					newBtn.parentConf !== undefined && newBtn.parentConf.split !== undefined,
 					i,
-					newButtons[i].parentConf
+					newBtn.parentConf
 				);
 			}
 		}
@@ -330,6 +338,40 @@ $.extend( Buttons.prototype, {
 
 		return this;
 	},
+
+	/**
+	 * Get a button's index
+	 * 
+	 * This is internally recursive
+	 * @param {element} node Button to get the index of
+	 * @return {string} Button index
+	 */
+	index: function ( node, nested, buttons )
+	{
+		if ( ! nested ) {
+			nested = '';
+			buttons = this.s.buttons;
+		}
+
+		for ( var i=0, ien=buttons.length ; i<ien ; i++ ) {
+			var inner = buttons[i].buttons;
+
+			if (buttons[i].node === node) {
+				return nested + i;
+			}
+
+			if ( inner && inner.length ) {
+				var match = this.index(node, i + '-', inner);
+
+				if (match !== null) {
+					return match;
+				}
+			}
+		}
+
+		return null;
+	},
+
 
 	/**
 	 * Get the instance name for the button set selector
@@ -448,6 +490,7 @@ $.extend( Buttons.prototype, {
 		if ( linerTag ) {
 			jqNode
 				.children( linerTag )
+				.eq(0)
 				.filter(':not(.dt-down-arrow)')
 				.html( text(label) );
 		}
@@ -673,6 +716,24 @@ $.extend( Buttons.prototype, {
 				opt;
 		};
 
+		// Spacers don't do much other than insert an element into the DOM
+		if (config.spacer) {
+			var spacer = $('<span></span>')
+				.addClass('dt-button-spacer ' + config.style + ' ' + buttonDom.spacerClass)
+				.html(text(config.text));
+
+			return {
+				conf:         config,
+				node:         spacer,
+				inserter:     spacer,
+				buttons:      [],
+				inCollection: inCollection,
+				isSplit:	  isSplit,
+				inSplit:	  inSplit,
+				collection:   null
+			};
+		}
+
 		if ( !isSplit && inSplit && splitCollectionDom ) {
 			buttonDom = splitDropdownButton;
 		}
@@ -704,7 +765,10 @@ $.extend( Buttons.prototype, {
 			};
 
 			var tag = config.tag || buttonDom.tag;
-			var clickBlurs = config.clickBlurs === undefined ? false : config.clickBlurs
+			var clickBlurs = config.clickBlurs === undefined
+				? true :
+				config.clickBlurs;
+
 			button = $('<'+tag+'/>')
 				.addClass( buttonDom.className )
 				.addClass( inSplit ? this.c.dom.splitDropdownButton.className : '')
@@ -720,8 +784,10 @@ $.extend( Buttons.prototype, {
 						button.trigger('blur');
 					}
 				} )
-				.on( 'keyup.dtb', function (e) {
+				.on( 'keypress.dtb', function (e) {
 					if ( e.keyCode === 13 ) {
+						e.preventDefault();
+
 						if ( ! button.hasClass( buttonDom.disabled ) && config.action ) {
 							action( e, dt, button, config );
 						}
@@ -833,16 +899,18 @@ $.extend( Buttons.prototype, {
 					e.preventDefault();
 					e.stopPropagation();
 
-					if ( ! dropButton.hasClass( buttonDom.disabled ) && dropButtonConfig.action ) {
+					if ( ! dropButton.hasClass( buttonDom.disabled )) {
 						splitAction( e, dt, dropButton, dropButtonConfig );
 					}
 					if ( clickBlurs ) {
 						dropButton.trigger('blur');
 					}
 				} )
-				.on( 'keyup.dtb', function (e) {
+				.on( 'keypress.dtb', function (e) {
 					if ( e.keyCode === 13 ) {
-						if ( ! dropButton.hasClass( buttonDom.disabled ) && dropButtonConfig.action ) {
+						e.preventDefault();
+
+						if ( ! dropButton.hasClass( buttonDom.disabled ) ) {
 							splitAction( e, dt, dropButton, dropButtonConfig );
 						}
 					}
@@ -1016,6 +1084,7 @@ $.extend( Buttons.prototype, {
 	 */
 	_resolveExtends: function ( conf )
 	{
+		var that = this;
 		var dt = this.s.dt;
 		var i, ien;
 		var toConfObject = function ( base ) {
@@ -1030,7 +1099,7 @@ $.extend( Buttons.prototype, {
 				}
 
 				if ( typeof base === 'function' ) {
-					base = base( dt, conf );
+					base = base.call( that, dt, conf );
 
 					if ( ! base ) {
 						return false;
@@ -1182,11 +1251,15 @@ $.extend( Buttons.prototype, {
 
 		if (content === false) {
 			close();
+			return;
 		}
 
 		var existingExpanded = $(dt.buttons( '[aria-haspopup="true"][aria-expanded="true"]' ).nodes());
 		if ( existingExpanded.length ) {
-			hostNode = existingExpanded.eq(0);
+			// Reuse the current position if the button that was triggered is inside an existing collection
+			if (hostNode.closest('div.dt-button-collection').length) {
+				hostNode = existingExpanded.eq(0);
+			}
 
 			close();
 		}
@@ -1392,7 +1465,12 @@ $.extend( Buttons.prototype, {
 		}
 
 		if ( options.background ) {
-			Buttons.background( true, options.backgroundClassName, options.fade, hostNode );
+			Buttons.background(
+				true,
+				options.backgroundClassName,
+				options.fade,
+				options.backgroundHost || hostNode
+			);
 		}
 
 		// This is bonkers, but if we don't have a click listener on the
@@ -1536,6 +1614,10 @@ Buttons.instanceSelector = function ( group, buttons )
 			// Index selector
 			ret.push( buttons[ input ].inst );
 		}
+		else if ( typeof input === 'object' ) {
+			// Actual instance selector
+			ret.push( input );
+		}
 	};
 	
 	process( group );
@@ -1608,10 +1690,12 @@ Buttons.buttonSelector = function ( insts, selector )
 		}
 		else if ( typeof selector === 'number' ) {
 			// Main button index selector
-			ret.push( {
-				inst: inst,
-				node: inst.s.buttons[ selector ].node
-			} );
+			if (inst.s.buttons[ selector ]) {
+				ret.push( {
+					inst: inst,
+					node: inst.s.buttons[ selector ].node
+				} );
+			}
 		}
 		else if ( typeof selector === 'string' ) {
 			if ( selector.indexOf( ',' ) !== -1 ) {
@@ -1738,7 +1822,8 @@ Buttons.defaults = {
 			tag: 'button',
 			className: 'dt-button',
 			active: 'active',
-			disabled: 'disabled'
+			disabled: 'disabled',
+			spacerClass: ''
 		},
 		buttonLiner: {
 			tag: 'span',
@@ -1775,7 +1860,7 @@ Buttons.defaults = {
  * @type {string}
  * @static
  */
-Buttons.version = '2.0.1';
+Buttons.version = '2.1.1';
 
 
 $.extend( _dtButtons, {
@@ -1904,6 +1989,13 @@ $.extend( _dtButtons, {
 				dt.off( 'length.dt'+conf.namespace );
 			}
 		};
+	},
+	spacer: {
+		style: 'empty',
+		spacer: true,
+		text: function ( dt ) {
+			return dt.i18n( 'buttons.spacer', '' );
+		}
 	}
 } );
 
@@ -2002,6 +2094,21 @@ DataTable.Api.register( ['buttons().disable()', 'button().disable()'], function 
 	} );
 } );
 
+// Button index
+DataTable.Api.register( 'button().index()', function () {
+	var idx = null;
+
+	this.each( function ( set ) {
+		var res = set.inst.index( set.node );
+
+		if (res !== null) {
+			idx = res;
+		}
+	} );
+
+	return idx;
+} );
+
 // Get button nodes
 DataTable.Api.registerPlural( 'buttons().nodes()', 'button().node()', function () {
 	var jq = $();
@@ -2080,7 +2187,7 @@ DataTable.Api.register( 'buttons().container()', function () {
 } );
 
 // Add a new button
-DataTable.Api.register( 'button().add()', function ( idx, conf ) {
+DataTable.Api.register( 'button().add()', function ( idx, conf, draw ) {
 	var ctx = this.context;
 
 	// Don't use `this` as it could be empty - select the instances directly
@@ -2088,7 +2195,7 @@ DataTable.Api.register( 'button().add()', function ( idx, conf ) {
 		var inst = Buttons.instanceSelector( this._groupSelector, ctx[0]._buttons );
 
 		if ( inst.length ) {
-			inst[0].add( conf, idx );
+			inst[0].add( conf, idx , draw);
 		}
 	}
 
