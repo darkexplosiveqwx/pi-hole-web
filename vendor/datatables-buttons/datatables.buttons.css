@@ -4,10 +4,10 @@
  *
  * To rebuild or modify this file with the latest versions of the included
  * software please visit:
- *   https://datatables.net/download/#bs/b-2.0.0
+ *   https://datatables.net/download/#bs/b-2.0.1
  *
  * Included libraries:
- *  Buttons 2.0.0
+ *  Buttons 2.0.1
  */
 
 @keyframes dtb-spinner {
@@ -231,6 +231,10 @@ span.dt-down-arrow {
   color: rgba(70, 70, 70, 0.9);
   font-size: 10px;
   padding-left: 10px;
+}
+
+div.dataTables_wrapper div.dt-buttons.btn-group button.btn:last-of-type:first-of-type {
+  border-radius: 4px !important;
 }
 
 
