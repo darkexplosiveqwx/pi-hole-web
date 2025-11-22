@@ -930,7 +930,7 @@ table.dataTable thead .sorting_desc_disabled::after {
   text-align: center;
 }
 
-table.dataTable thead .sorting::after {
+table.dataTable thead .sorting:not(.sorting_asc, .sorting_desc)::after {
   opacity: 0.6;
 }
 

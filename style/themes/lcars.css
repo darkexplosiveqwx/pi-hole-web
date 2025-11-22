@@ -1361,7 +1361,7 @@ table.table-bordered.dataTable td {
   border: 1px solid #111 !important;
 }
 
-table.dataTable thead .sorting::before {
+table.dataTable thead .sorting:not(.sorting_asc, .sorting_desc)::before {
   content: "\25B3";
   position: absolute;
   bottom: 16px;
@@ -1372,15 +1372,15 @@ table.dataTable thead .sorting::before {
   font-size: 0.6em;
 }
 
-table.dataTable thead .sorting:after,
-table.dataTable thead .sorting_asc:after,
-table.dataTable thead .sorting_desc:after,
-table.dataTable thead .sorting_asc_disabled:after,
-table.dataTable thead .sorting_desc_disabled:after {
+table.dataTable thead .sorting::after,
+table.dataTable thead .sorting_asc::after,
+table.dataTable thead .sorting_desc::after,
+table.dataTable thead .sorting_asc_disabled::after,
+table.dataTable thead .sorting_desc_disabled::after {
   opacity: 0.6;
 }
 
-table.dataTable thead .sorting:after {
+table.dataTable thead .sorting:not(.sorting_asc, .sorting_desc)::after {
   opacity: 0.3;
   content: "\25BD";
   font-size: 0.6em;
@@ -1394,8 +1394,8 @@ table.dataTable thead .sorting_desc::after {
   content: "\25BC";
 }
 
-table.dataTable thead .sorting_asc_disabled:after,
-table.dataTable thead .sorting_desc_disabled:after {
+table.dataTable thead .sorting_asc_disabled::after,
+table.dataTable thead .sorting_desc_disabled::after {
   color: #eee;
 }
 
