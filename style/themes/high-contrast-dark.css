@@ -742,6 +742,9 @@ fieldset[disabled] .form-control {
 .table-striped > tbody > tr:nth-of-type(2n + 1) {
   background-color: #1d252d;
 }
+table.dataTable.table-striped > tbody > tr.odd {
+  background-color: #1d252d;
+}
 
 .panel,
 .panel-body,
@@ -916,6 +919,25 @@ input[type="password"]::-webkit-caps-lock-indicator {
 }
 .allowed-row td {
   background-color: rgba(0, 64, 64, 0.35);
+}
+
+table.dataTable thead > tr > th.sorting::before {
+  opacity: 0.4;
+}
+
+table.dataTable thead > tr > th.sorting::after {
+  opacity: 0.4;
+}
+
+table.dataTable thead > tr > th.sorting:hover::before,
+table.dataTable thead > tr > th.sorting:hover::after {
+  color: var(--primary-color);
+}
+
+table.dataTable thead > tr > th.sorting.sorting_asc::before,
+table.dataTable thead > tr > th.sorting.sorting_desc::after {
+  opacity: 1;
+  color: #fff;
 }
 
 td.highlight {

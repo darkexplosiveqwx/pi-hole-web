@@ -1361,6 +1361,27 @@ table.table-bordered.dataTable td {
   border: 1px solid #111 !important;
 }
 
+table.dataTable thead > tr > th.sorting::before {
+  bottom: calc(50% + 2px);
+  opacity: 0.2;
+}
+
+table.dataTable thead > tr > th.sorting::after {
+  opacity: 0.2;
+}
+
+table.dataTable thead > tr > th.sorting.sorting_asc::before {
+  opacity: 1;
+}
+
+table.dataTable thead > tr > th.sorting.sorting_desc::after {
+  opacity: 1;
+}
+
+table.dataTable.table-striped > tbody > tr.odd {
+  background: none;
+  background-color: rgba(80, 80, 80, 0.1);
+}
 .table-striped > tbody > tr:nth-of-type(2n + 1) {
   background: none;
   background-color: rgba(80, 80, 80, 0.1);

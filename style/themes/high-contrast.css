@@ -382,9 +382,6 @@ select:-webkit-autofill {
 .table-bordered > tfoot > tr > td {
   border: 1px solid #d0d0d0;
 }
-.table-striped > tbody > tr:nth-of-type(2n + 1) {
-  background-color: #fcfcfc;
-}
 
 .blocked-row td {
   background-color: rgba(230, 160, 160, 0.3);
@@ -395,6 +392,25 @@ select:-webkit-autofill {
 
 td.highlight {
   background-color: rgba(255, 204, 0, 0.333);
+}
+
+table.dataTable thead > tr > th.sorting::before {
+  opacity: 0.5;
+}
+
+table.dataTable thead > tr > th.sorting::after {
+  opacity: 0.5;
+}
+
+table.dataTable thead > tr > th.sorting:hover::before,
+table.dataTable thead > tr > th.sorting:hover::after {
+  color: var(--primary-color);
+}
+
+table.dataTable thead > tr > th.sorting.sorting_asc::before,
+table.dataTable thead > tr > th.sorting.sorting_desc::after {
+  opacity: 1;
+  color: #fff;
 }
 
 #domain-frequency .table-responsive table tr th:nth-child(3),
